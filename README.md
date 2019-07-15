@@ -88,4 +88,4 @@ cd bin
 
 执行bin目录下的`reset-slave.sh`, 之后 连接数据库尝试，问题已经解决。
 
-> 另提供了一个关闭备份的脚本`stop-slave.sh`
+> 另提供了一个关闭备份的脚本`stop-replicas.sh`
