@@ -10,15 +10,18 @@
 │   ├── add-slave-account-to-master.sh
 │   ├── reset-slave.sh
 │   ├── slave-replias-master-start.sh
+│   ├── slave2-replias-master-start.sh
 │   └── stop-replicas.sh
 ├── config
 │   ├── master.cnf
 │   └── slave.cnf
+│   └── slave2.cnf
 ├── docker-compose.yml
 ├── .env
 ├── master-data
 ├── show-slave-status.sh
 └── slave-data
+└── slave2-data
 ```
 
 ## 目录/文件说明：
@@ -26,10 +29,13 @@
 - `bin/add-slave-account-to-master.sh` ：Master节点添加备份账户的脚本
 - `config/master.cnf` : MySQL Master节点的配置文件
 - `config/slave.cnf` : MySQL Slave节点的配置文件
+- `config/slave2.cnf` : MySQL Slave2节点的配置文件
 - `docker-compose.yml` :  构建主从节点与挂载数据目录的docker-compose配置文件
 - `master-data` : 主节点数据位置，当然生产环境要挂到别的位置
 - `slave-data` ：从节点数据位置，当然生产环境要挂到别的位置
+- `slave2-data` ：从节点数据位置，当然生产环境要挂到别的位置
 - `bin/slave-replias-master-start.sh` ：从节点添加主节点备份账号信息并开启备份的脚本
+- `bin/slave2-replias-master-start.sh` ：从节点添加主节点备份账号信息并开启备份的脚本
 - `bin/stop-replicas.sh` ：关闭从节点备份的脚本
 - `bin/reset-slave.sh` : 重置从节点备份状态，修复由于主从集群重启后无法建立集群的问题
 - `.env` : 环境变量文件
@@ -45,10 +51,14 @@
 MASTER_DATA=./master-data
 # set slave data dir
 SLAVE_DATA=./slave-data
+# set slave2 data dir
+SLAVE2_DATA=./slave2-data
 # set master & slave root password
 MASTER_PASSWD=P@ssw0rd
 # set slave root passwor
 SLAVE_PASSWD=P@ssw0rd
+# set slave2 root passwor
+SLAVE2_PASSWD=P@ssw0rd
 # set replicas mysql account name
 REPL_NAME=replicas
 # set replicas mysql password
@@ -66,19 +76,16 @@ REPL_PASSWD=replicasPasswd
 
 检查已经启动
 
-![](images/1149398-20190705165416268-583688376.png)
-
 3.进入bin目录，执行脚本
 
 ```bash
 cd bin
 ./add-slave-account-to-master.sh #读取mysql密码，为主节点添加备份账户
 ./slave-replias-master-start.sh #从节点使用备份账户连接主节点，开启备份
+./slave2-replias-master-start.sh #从节点使用备份账户连接主节点，开启备份
 ```
 
 4.查看集群状态，在bin目录下执行`./show-slave-status.sh`
-
-![](images/1149398-20190705181450047-1683700564.png)
 
 到此搭建完成。
 
@@ -88,4 +95,4 @@ cd bin
 
 执行bin目录下的`reset-slave.sh`, 之后 连接数据库尝试，问题已经解决。
 
-> 另提供了一个关闭备份的脚本`stop-slave.sh`
+> 另提供了一个关闭备份的脚本`stop-replicas.sh`
